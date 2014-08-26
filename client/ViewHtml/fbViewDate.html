@@ -1,0 +1,28 @@
+<template name="fbViewDate_create_update">
+  {{#if isVisible}}
+  <div class='form-group {{#if error}}has-error{{/if}}'>
+    {{#if schemaObj.labelText}}<label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
+    <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+      <input type='date' class='form-control' min={{schemaObj.minValue}}  max={{schemaObj.maxValue}} id='{{_id}}' value={{currentValue}}>
+      {{#if error}}<span class='help-block'>{{error}}</span>{{/if}}
+    </div>
+  </div>
+  {{/if}}
+</template>
+
+<template name="fbViewDate_read">
+  {{#if isVisible}}
+    {{#if schemaObj.labelText}}
+      <div class='form-group'>
+        <label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>
+        <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+          <p id='{{_id}}'>{{currentValue}}</p>
+        </div>
+      </div>
+    {{else}}
+      <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+        <p id='{{_id}}'>{{currentValue}}</p>
+      </div>
+    {{/if}}
+  {{/if}}
+</template>

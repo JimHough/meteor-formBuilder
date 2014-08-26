@@ -1,0 +1,54 @@
+<template name='fbViewQRCode_create_update'>
+  <!--Pop-up Window-->
+  <div class="modal fade fbViewQRCode-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">QR Code Scanner</h4>
+        </div>
+        <div class="modal-body">
+          {{#if errorMsg}}
+            <p>{{errorMsg}}</p>
+          {{else}}
+            <video class="videoOutput" style="display:none;"></video>
+            <canvas class="canvasOutput"></canvas>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Form Control-->
+  {{#if isVisible}}
+    <div class='form-group {{#if error}}has-error{{/if}}'>
+      {{#if schemaObj.labelText}}<label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
+      <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+      <div class='input-group'>
+        {{#if running}}
+          <input type="text" class="form-control" id='{{_id}}' value="{{currentValue}}" readonly={{readonly}}>
+          <span class="input-group-btn">
+            <button type="button" class='btn btn-danger button-stop'>Stop</button>
+          </span>
+        {{else}}
+          <input type="text" class="form-control" id='{{_id}}' value="{{currentValue}}" readonly={{readonly}}/>
+          <span class="input-group-btn">
+            <button type="button" class='btn btn-success button-start'>Start</button>
+          </span>
+        {{/if}}
+        {{#if error}}<span class='help-block'>{{error}}</span>{{/if}}
+      </div>
+      </div>
+    </div>
+  {{/if}}
+</template>
+
+<template name='fbViewQRCode_read'>
+  {{#if isVisible}}
+    <div class='form-group'>
+      {{#if schemaObj.labelText}}<label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
+      <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+        <input type="text" class='form-control' id='{{_id}}' value="{{currentValue}}" readonly>
+      </div>
+    </div>
+  {{/if}}
+</template>

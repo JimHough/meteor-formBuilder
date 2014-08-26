@@ -1,0 +1,31 @@
+<!--typeahead.meteor.com-->
+<template name="fbViewTypeahead_create_update">
+  {{#if isVisible}}
+  <div class='form-group {{#if error}}has-error{{/if}}'>
+    {{#if schemaObj.labelText}}<label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
+    <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+      <div class='tt-dropdown-scroll'>
+        <input type="text" class="form-control typeahead" id='{{_id}}' placeholder='{{schemaObj.placeholder}}'  value="{{currentValue}}" autocomplete="off" spellcheck="off"/>
+      </div>
+      {{#if error}}<span class='help-block'>{{error}}</span>{{/if}}
+    </div>
+  </div>
+  {{/if}}
+</template>
+
+<template name="fbViewTypeahead_read">
+  {{#if isVisible}}
+    {{#if schemaObj.labelText}}
+      <div class='form-group'>
+        <label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>
+        <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+          <p id='{{_id}}'>{{currentValue}}</p>
+        </div>
+      </div>
+    {{else}}
+      <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+        <p id='{{_id}}'>{{currentValue}}</p>
+      </div>
+    {{/if}}
+  {{/if}}
+</template>
