@@ -1,5 +1,5 @@
 Template.fbViewText_create_update.events({
-  'input':function(event,context) {
+  'input textarea':function(event,context) {
     var value = event.target.value;
     var viewData = FormBuilder.views.findOne({_id:event.target.id});
     FormBuilder.views.update({_id:viewData._id}, {$set:{currentValue:value}});

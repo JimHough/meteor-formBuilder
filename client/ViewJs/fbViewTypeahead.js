@@ -19,10 +19,12 @@ Template.fbViewTypeahead_create_update.rendered = function(){
   var collection = window[data[0]];
   var field = data[1] || 'name';
   var findMatches = function (q, cb) {
+    q = q + "";
     q = q.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
     var query = {};
     //regex used to determine if a string starts with the substring `q`
-    query[field] = new RegExp('^' + q, 'i');
+    query.$where = new RegExp('^' + q, 'i');
+    query.$where += ".test(this." + field + ")";
     var matches = collection.find(query).map(function(item){return item[field];});
     //regex used to determine if a string contains the substring `q`
     query[field] = new RegExp(q, 'i');
@@ -30,10 +32,10 @@ Template.fbViewTypeahead_create_update.rendered = function(){
     matches = _.union(matches, matchesAnywhere);
     //Make the objects to be passed back with a value attribute
     for(var i=0; i<matches.length; i++)
-      matches[i] = {value:matches[i]};
+      matches[i] = {value:matches[i]+""};
     cb(matches);
   };
   
-  $('.typeahead').typeahead({hint: false, highlight: true, minLength: 1},{source: findMatches});
-  $('.twitter-typeahead').css('display', '');
+  this.$('.typeahead').typeahead({hint: false, highlight: true, minLength: 1},{source: findMatches});
+  this.$('.twitter-typeahead').css('display', '');
 };
