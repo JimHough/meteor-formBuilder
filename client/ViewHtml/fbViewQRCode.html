@@ -1,6 +1,6 @@
 <template name='fbViewQRCode_create_update'>
   <!--Pop-up Window-->
-  <div class="modal fade fbViewQRCode-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fbViewQRCode-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -10,10 +10,9 @@
         <div class="modal-body">
           {{#if errorMsg}}
             <p>{{errorMsg}}</p>
-          {{else}}
+          {{/if}}
             <video class="videoOutput" style="display:none;"></video>
             <canvas class="canvasOutput"></canvas>
-          {{/if}}
         </div>
       </div>
     </div>
@@ -27,16 +26,20 @@
         {{#if running}}
           <input type="text" class="form-control" id='{{_id}}' value="{{currentValue}}" readonly={{readonly}}>
           <span class="input-group-btn">
-            <button type="button" class='btn btn-danger button-stop'>Stop</button>
+            <button type="button" class='btn btn-default button-stop'>
+                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+            </button>
           </span>
         {{else}}
           <input type="text" class="form-control" id='{{_id}}' value="{{currentValue}}" readonly={{readonly}}/>
           <span class="input-group-btn">
-            <button type="button" class='btn btn-success button-start'>Start</button>
+            <button type="button" class='btn btn-default button-start'>
+                <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
+            </button>
           </span>
         {{/if}}
-        {{#if error}}<span class='help-block'>{{error}}</span>{{/if}}
       </div>
+      {{#if error}}<span class='help-block'>{{error}}</span>{{/if}}
       </div>
     </div>
   {{/if}}

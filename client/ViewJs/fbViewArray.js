@@ -4,8 +4,8 @@ if((typeof FormBuilder.types.fbArray) !== "object") FormBuilder.types.fbArray = 
 if(Meteor.isClient){
   //Private functions
   //Enables and disables the function buttons based on the views position and the maxCount and minCount values
-  var updateButtons = function(viewDataID){
-    var viewDataObj = FormBuilder.views.findOne({_id:viewDataID});
+  var updateButtons = function(event){
+    var viewDataObj = FormBuilder.views.findOne({_id:event.target.id});
     var viewDataObjs = FormBuilder.views.find({parentID:viewDataObj.parentID});
     var arrayField = FormBuilder.views.findOne({_id:viewDataObj.parentID});
     var length = viewDataObjs.count();
@@ -64,7 +64,7 @@ if(Meteor.isClient){
     },
     'mouseenter .fbArray-item' : function (event, template) {
       $(event.target).find(".fbArray-buttons").show();
-      updateButtons(event.target.id);
+      updateButtons(event);
     },
     'click .fbArray-add' : function (event, template) {
       var viewDataID = $(event.target).parents(".fbArray-item")[0];
