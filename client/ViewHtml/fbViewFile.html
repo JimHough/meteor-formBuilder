@@ -1,5 +1,6 @@
 <template name='fbViewFile_create_update'>
   <!--Pop-up Window-->
+  {{#if pngAllowed}}
   <div class="modal fbViewFile-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -17,6 +18,7 @@
       </div>
     </div>
   </div>
+  {{/if}}
   <!--Form Control-->
   {{#if isVisible}}
     <div class='form-group {{#if error}}has-error{{/if}}'>
@@ -28,6 +30,7 @@
           {{#with fileUrl}}
             <img src="{{this.url}}" alt="thumbnail" class="image-preview dropzone" id='{{this.id}}' style="max-width: 80px; max-height: 60px;">
           {{/with}}
+          <span style="padding-left: 10px;">{{fileText}}</span>
           <span class="input-group-btn">
             <input type="file" accept='{{schemaObj.accept}}' class='input-browse' style='display:block;visibility:hidden;width:0;height:0;'>
             {{#if running}}
@@ -38,9 +41,11 @@
               <button type="button" class='btn btn-default button-browse'>
                 <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
               </button>
+              {{#if pngAllowed}}
               <button type="button" class='btn btn-default button-start'>
                 <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
               </button>
+              {{/if}}
             {{/if}}
           </span>
         </div>
@@ -57,9 +62,12 @@
         <label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>
       {{/if}}
       <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
-        {{#with fileUrl}}
-          <img src="{{this.url}}" alt="thumbnail" class="image-preview" id='{{this.id}}' style="max-width: 80px; max-height: 60px;">
-        {{/with}}
+        <div class='input-group'>
+          {{#with fileUrl}}
+            <img src="{{this.url}}" alt="thumbnail" class="image-preview dropzone" id='{{this.id}}' style="max-width: 80px; max-height: 60px;">
+          {{/with}}
+          <span style="padding-left: 10px;">{{fileText}}</span>
+        </div>
       </div>
     </div>
     {{/if}}

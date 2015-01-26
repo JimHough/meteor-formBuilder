@@ -12,6 +12,7 @@ Package.on_use(function (api) {
     //CSS
   api.add_files('style.css', 'client');
   //HTML
+  api.add_files('client/spark-md5.js', 'client');
   api.add_files('client/fbWrapper.html', 'client');
   api.add_files('client/ViewHtml/fbViewAddress.html', 'client');
   api.add_files('client/ViewHtml/fbViewArray.html', 'client');
@@ -55,6 +56,55 @@ Package.on_use(function (api) {
   //Images
   api.add_files('img/noImageThumb.png','client');
   api.add_files('img/dropHere.png','client');
+  api.add_files('img/icons/bat.bmp','client');
+  api.add_files('img/icons/bmp.bmp','client');
+  api.add_files('img/icons/db.bmp','client');
+  api.add_files('img/icons/default.bmp','client');
+  api.add_files('img/icons/doc.bmp','client');
+  api.add_files('img/icons/docx.bmp','client');
+  api.add_files('img/icons/dot.bmp','client');
+  api.add_files('img/icons/dwfx.bmp','client');
+  api.add_files('img/icons/dwg.bmp','client');
+  api.add_files('img/icons/dxf.bmp','client');
+  api.add_files('img/icons/err.bmp','client');
+  api.add_files('img/icons/zip.bmp','client');
+  api.add_files('img/icons/gif.bmp','client');
+  api.add_files('img/icons/htm.bmp','client');
+  api.add_files('img/icons/iam.bmp','client');
+  api.add_files('img/icons/idv.bmp','client');
+  api.add_files('img/icons/idw.bmp','client');
+  api.add_files('img/icons/imgres.bmp','client');
+  api.add_files('img/icons/ini.bmp','client');
+  api.add_files('img/icons/ipj.bmp','client');
+  api.add_files('img/icons/ipn.bmp','client');
+  api.add_files('img/icons/ipt.bmp','client');
+  api.add_files('img/icons/jpg.bmp','client');
+  api.add_files('img/icons/lck.bmp','client');
+  api.add_files('img/icons/lnk.bmp','client');
+  api.add_files('img/icons/log.bmp','client');
+  api.add_files('img/icons/mdb.bmp','client');
+  api.add_files('img/icons/mov.bmp','client');
+  api.add_files('img/icons/mpp.bmp','client');
+  api.add_files('img/icons/msg.bmp','client');
+  api.add_files('img/icons/ods.bmp','client');
+  api.add_files('img/icons/odt.bmp','client');
+  api.add_files('img/icons/pdf.bmp','client');
+  api.add_files('img/icons/png.bmp','client');
+  api.add_files('img/icons/ppt.bmp','client');
+  api.add_files('img/icons/pptx.bmp','client');
+  api.add_files('img/icons/rar.bmp','client');
+  api.add_files('img/icons/rtf.bmp','client');
+  api.add_files('img/icons/tiff.bmp','client');
+  api.add_files('img/icons/txt.bmp','client');
+  api.add_files('img/icons/wbk.bmp','client');
+  api.add_files('img/icons/xls.bmp','client');
+  api.add_files('img/icons/xlsb.bmp','client');
+  api.add_files('img/icons/xlsm.bmp','client');
+  api.add_files('img/icons/xlsx.bmp','client');
+  api.add_files('img/icons/xlt.bmp','client');
+  api.add_files('img/icons/xltm.bmp','client');
+  api.add_files('img/icons/xmcd.bmp','client');
+  api.add_files('img/icons/xml.bmp','client');
   if (api.export)
     api.export('FormBuilder');
 });

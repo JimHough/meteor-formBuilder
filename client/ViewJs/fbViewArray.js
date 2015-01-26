@@ -40,7 +40,6 @@ if(Meteor.isClient){
   var helpers = {
     //Gets the array of fields from the relevant data store for the form
     getFields: function () {
-      var tmpl = UI._templateInstance();
       return FormBuilder.views.find({parentID:this._id}, {sort: {position : 1 }});
     },
     getTemplate: function(){

@@ -145,12 +145,12 @@ Template.fbViewQRCode_create_update.events({
 Template.fbViewQRCode_create_update.helpers({
   source:null,
   errorMsg:function(){
-    var template = UI._templateInstance();
+    var template = Template.instance();
     template.fbViewQRCode.errorMsgDep.depend();
     return template.fbViewQRCode.errorMsg;
   },
   running:function(){
-    var template = UI._templateInstance();
+    var template = Template.instance();
     template.fbViewQRCode.runningDep.depend();
     return template.fbViewQRCode.running;
   }

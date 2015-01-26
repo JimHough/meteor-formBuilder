@@ -2,7 +2,7 @@ navigator.getUserMedia  = navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
                           navigator.msGetUserMedia;
-
+//<editor-fold desc="methods">
 //Finds a forwards facing camera yo use (only on chrome)
 var getSource = function(template){
   //Find a camera that is facing the environment or has no facing value
@@ -18,12 +18,6 @@ var getSource = function(template){
       if (data.videoSource === null) data.videoSource = {error:true, id:'No suitable camera found'};
     });
   }
-};
-
-//Sets the current value of the form field
-var setValue = function(template, value){
-    var id = template.$('.image-preview').attr('id');
-    FormBuilder.views.update({_id:id}, {$set:{currentValue:value}});
 };
 
 //Takes a snapshot and checks it for codes
@@ -108,14 +102,104 @@ var stopScan = function(event, template){
   data.runningDep.changed();
 };
 
-Template.fbViewFile_create_update.created = function(){
-  if(!this.fbViewFile) this.fbViewFile = {};
-  this.fbViewFile.errorMsg = "";
-  this.fbViewFile.errorMsgDep = new Deps.Dependency();
-  this.fbViewFile.running = false;
-  this.fbViewFile.runningDep = new Deps.Dependency();
+//Sets the current value of the form field
+var setValue = function(template, value){
+  var fileData={reference:"", md5:""};
+  var id = template.$('.image-preview').attr('id');
+  if(value instanceof File){
+    _.extend(fileData, _.pick(value, "name", "size", "type", "lastModified"));
+    fileData.extension = fileData.name.split(".").pop().toLowerCase();
+    fileData.name = fileData.name.substring(0,fileData.name.length-fileData.extension.length-1);
+    if(fileData.type.lastIndexOf('image',0) === 0){//If the file is an image create a preview
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        this.fbViewFile.thumbnail = reader.result;
+      }.bind(template);
+      reader.readAsDataURL(value);
+    }
+    else{//If the file is not an image get the icon to use from the icons library
+      template.fbViewFile.thumbnail = '/packages/jhough_formbuilder/img/icons/'+ fileData.extension +'.bmp';
+      template.fbViewFile.thumbnailDep.changed();
+    }
+    template.fbViewFile.file = value;
+    template.fbViewFile.fileDep.changed();
+    //Calculate the MD5 checksum
+    SparkMD5.GetFileMD5(value, function(hash){
+      fileData.md5 = hash;
+      FormBuilder.views.update({_id:id}, {$set:{currentValue:fileData}});
+      template.fbViewFile.md5 = hash;
+      template.fbViewFile.md5Dep.changed();
+    });
+  }
+  else if((typeof value === "string")&&(value.lastIndexOf('data:image')===0)){
+    fileData.lastModified = Date.now();
+    fileData.type = "image/png";
+    fileData.name = "snapshot";
+    fileData.extension = "png";
+    fileData.size = value.split(",")[1].length * 0.75;
+    template.fbViewFile.md5 = "";
+    template.fbViewFile.md5Dep.changed();
+    template.fbViewFile.file = null;
+    template.fbViewFile.fileDep.changed();
+    template.fbViewFile.thumbnail = value;
+    template.fbViewFile.thumbnailDep.changed();
+  }
+  FormBuilder.views.update({_id:id}, {$set:{currentValue:fileData}});
+};
+
+//Gets the url to show for the preview
+var getFileUrl = function(template){
+  if(!FormBuilder.helpers.canAccess(template, "data._id", "data.formObj")) return;
+  var result = {id:template.data._id, url:'/packages/jhough_formbuilder/img/noImageThumb.png'};
+  var view = FormBuilder.views.findOne(result.id);
+  if(FormBuilder.helpers.canAccess(view, "currentValue.reference", "currentValue.type", "currentValue.extension") && view.currentValue.reference !== "")
+  {
+    if(view.currentValue.type.lastIndexOf('image',0) === 0){
+      var refData = view.currentValue.reference.split(":");
+      if(refData.length === 2){
+        var fsCollection = FS._collections[refData[0]];
+        if(fsCollection){
+          var fsFile = fsCollection.findOne(refData[1]);
+          if (fsFile) result.url = fsFile.url();
+        }
+      }
+    }
+    else{
+      result.url = '/packages/jhough_formbuilder/img/icons/'+ view.currentValue.extension +'.bmp';
+    }
+  }
+  else if(template.fbViewFile.thumbnail !== "")
+  {
+    result.url = template.fbViewFile.thumbnail;
+  }
+  else if((template.data.formObj.type === "create") || (template.data.formObj.type === "update"))
+    result.url = '/packages/jhough_formbuilder/img/dropHere.png';
+  return result;
+};
+
+var init = function(template, readonly){
+  if(!template.fbViewFile) template.fbViewFile = {};
+  template.fbViewFile.errorMsg = "";
+  template.fbViewFile.errorMsgDep = new Deps.Dependency();
+  template.fbViewFile.running = false;
+  template.fbViewFile.runningDep = new Deps.Dependency();
+  template.fbViewFile.file = {name:"",extension:"",size:0,type:"",lastModified:0};
+  template.fbViewFile.fileDep = new Deps.Dependency();
+  template.fbViewFile.md5 = "";
+  template.fbViewFile.md5Dep = new Deps.Dependency();
+  if(readonly)
+    template.fbViewFile.thumbnail = '/packages/jhough_formbuilder/img/noImageThumb.png';
+  else 
+    template.fbViewFile.thumbnail = '/packages/jhough_formbuilder/img/dropHere.png';
+  template.fbViewFile.thumbnailDep = new Deps.Dependency();
   //Find the right camera to use, only works in chrome
-  getSource(this);
+  getSource(template);
+};
+//</editor-fold>
+
+//<editor-fold desc="create/update Template">
+Template.fbViewFile_create_update.created = function(){
+  init(this);
 };
 
 Template.fbViewFile_create_update.events({
@@ -134,11 +218,7 @@ Template.fbViewFile_create_update.events({
   'click .button-takePicture' : function (event, template) {
     event.preventDefault();
     var canvas = template.$('.canvasOutput')[0];
-    var fileData={type:"image/png", lastModified:Date.now()};
-    fileData.url = canvas.toDataURL("image/png");
-    fileData.name = "snapshot";
-    fileData.size = fileData.url.split(",")[1].length * 0.75;
-    setValue(template, fileData);
+    setValue(template, canvas.toDataURL("image/png"));
     stopScan(event, template);
   },
   'hidden.bs.modal' : function (event, template) {
@@ -146,71 +226,46 @@ Template.fbViewFile_create_update.events({
   },
   'change .input-browse' : function (event, template){
       event.preventDefault();
-      var input = template.$('.input-browse')[0];
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onloadend = function () {
-          var fileData=_.extend({url:reader.result}, _.pick(this, "name", "size", "type", "lastModified"));
-          setValue(template, fileData);
-        }.bind(input.files[0]);
-        reader.readAsDataURL(input.files[0]);
-    }
+      setValue(template, event.target.files[0]);
   },
   'dropped .dropzone':function(event, template)
   {
     if(FormBuilder.helpers.canAccess(event, "originalEvent.dataTransfer.files.length"))
-    {
-      var reader = new FileReader();
-      reader.onloadend = function () {
-        var fileData=_.extend({url:reader.result}, _.pick(this, "name", "size", "type", "lastModified"));
-        setValue(template, fileData);
-      }.bind(event.originalEvent.dataTransfer.files[0]);
-      reader.readAsDataURL(event.originalEvent.dataTransfer.files[0]);
-    }
+      setValue(template, event.originalEvent.dataTransfer.files[0]);
   }
 });
 
-var getFileUrl = function(template){
-  if(!FormBuilder.helpers.canAccess(template, "data._id", "data.formObj")) return;
-  var result = {id:template.data._id, url:'/packages/jhough_formbuilder/img/noImageThumb.png'};
-  var view = FormBuilder.views.findOne(result.id);
-  if(FormBuilder.helpers.canAccess(view, "currentValue.store", "currentValue.id"))
-  {
-    var store = view.currentValue.store;
-    var fsCollection = FS._collections[store];
-    if(fsCollection){
-      var fsFile = fsCollection.findOne(view.currentValue.id);
-      if (fsFile) result.url = fsFile.url();
-    }
-  }
-  else if(FormBuilder.helpers.canAccess(view, "currentValue.url"))
-  {
-    result.url = view.currentValue.url;
-  }
-  else if((template.data.formObj.type === "create") || (template.data.formObj.type === "update"))
-    result.url = '/packages/jhough_formbuilder/img/dropHere.png';
-  return result;
-};
-
 Template.fbViewFile_create_update.helpers({
   source:null,
-  errorMsg:function(){
-    var template = UI._templateInstance();
-    template.fbViewFile.errorMsgDep.depend();
-    return template.fbViewFile.errorMsg;
-  },
   running:function(){
-    var template = UI._templateInstance();
+    var template = Template.instance();
     template.fbViewFile.runningDep.depend();
     return template.fbViewFile.running;
   },
   fileUrl:function(){
-    return getFileUrl(UI._templateInstance());
+    return getFileUrl(Template.instance());
+  },
+  pngAllowed:function(){
+    var template = Template.instance();
+    return template.data.schemaObj.accept.indexOf(".png")>=0;
+  },
+  fileText:function(){
+    var template = Template.instance();
+    return template.data.currentValue.name;
   }
 });
+//</editor-fold>
+
+//<editor-fold desc="read Template">
+Template.fbViewFile_read.created = function(){init(this);};
 
 Template.fbViewFile_read.helpers({
   fileUrl:function(){
-    return getFileUrl(UI._templateInstance());
+    return getFileUrl(Template.instance());
+  },
+  fileText:function(){
+    var template = Template.instance();
+    return template.data.currentValue.name;
   }
 });
+//</editor-fold>
