@@ -5,7 +5,7 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  //api.use(['handlebars', 'underscore', 'templating'], 'client');
+  api.use('underscore', 'server');
   api.use(['livedata', 'underscore', 'deps', 'templating', 'ui', 'blaze', 'ejson', 'reactive-var'], 'client');
   api.use('raix:ui-dropped-event@0.0.7', 'client');
   api.use('mongo', ['client', 'server']);
@@ -29,6 +29,8 @@ Package.on_use(function (api) {
   api.add_files('lib/fbHelpers.js', ['client','server']);
   api.add_files('lib/fbWrapper.js', ['client','server']);
   //Controllers (client and server in lib)
+  api.add_files('lib/Controllers/fbControllerBase.js', ['client','server']);
+  api.add_files('lib/Controllers/fbControllerBaseMulti.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerAddress.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerArray.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerDate.js', ['client','server']);
