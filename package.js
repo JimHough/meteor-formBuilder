@@ -16,6 +16,7 @@ Package.on_use(function (api) {
   api.add_files('client/fbWrapper.html', 'client');
   api.add_files('client/ViewHtml/fbViewAddress.html', 'client');
   api.add_files('client/ViewHtml/fbViewArray.html', 'client');
+  api.add_files('client/ViewHtml/fbViewCheckbox.html', 'client');
   api.add_files('client/ViewHtml/fbViewDate.html', 'client');
   api.add_files('client/ViewHtml/fbViewDob.html', 'client');
   api.add_files('client/ViewHtml/fbViewFile.html', 'client');
@@ -33,6 +34,7 @@ Package.on_use(function (api) {
   api.add_files('lib/Controllers/fbControllerBaseMulti.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerAddress.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerArray.js', ['client','server']);
+  api.add_files('lib/Controllers/fbControllerCheckbox.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerDate.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerDob.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerFile.js', ['client','server']);
@@ -46,6 +48,7 @@ Package.on_use(function (api) {
   //Javascript
   api.add_files('client/ViewJs/fbViewAddress.js', 'client');
   api.add_files('client/ViewJs/fbViewArray.js', 'client');
+  api.add_files('client/ViewJs/fbViewCheckbox.js', 'client');
   api.add_files('client/ViewJs/fbViewDate.js', 'client');
   api.add_files('client/ViewJs/fbViewDob.js', 'client');
   api.add_files('client/ViewJs/fbViewFile.js', 'client');
