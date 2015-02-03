@@ -15,6 +15,8 @@ Template.fbViewTypeahead_create_update.events({
 });
 
 Template.fbViewTypeahead_create_update.rendered = function(){
+  if(this.data.schemaObj.dataSource === null)
+    throw new Error("TypeAhead control no datasource specified.");
   var data = this.data.schemaObj.dataSource.split(".");
   var collection = window[data[0]];
   var field = data[1] || 'name';

@@ -1,5 +1,5 @@
 Template.fbViewSelect_create_update.events({
-    /*'input': function (event, context) {
+    'input': function (event, context) {
         var value = event.target.value;
         var viewData = FormBuilder.views.findOne({_id: event.target.id});
         FormBuilder.views.update({_id: viewData._id}, {$set: {currentValue: value}});
@@ -7,7 +7,7 @@ Template.fbViewSelect_create_update.events({
             var error = FormBuilder.controllers[viewData.schemaObj.controller].validate(viewData.fieldName, value, viewData.schemaObj, window[viewData.formObj.collection], viewData.formObj.document);
             FormBuilder.views.update({_id: viewData._id}, {$set: {error: error}});
         }
-    }*/
+      }
 });
 
 Template.fbViewSelect_create_update.rendered = function () {
@@ -17,6 +17,7 @@ Template.fbViewSelect_create_update.rendered = function () {
     var field = data[1] || 'name';
     template.autorun(function(){
         var select = template.$('select')[0];
+        select.add(document.createElement("option"));
         collection.find().forEach(
             function (myDoc) {
                 var option = document.createElement("option");
