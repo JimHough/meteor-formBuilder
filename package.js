@@ -7,7 +7,8 @@ Package.describe({
 Package.on_use(function (api) {
   api.use('underscore', 'server');
   api.use(['livedata', 'underscore', 'deps', 'templating', 'ui', 'blaze', 'ejson', 'reactive-var'], 'client');
-  api.use('raix:ui-dropped-event@0.0.7', 'client');
+  api.use('raix:ui-dropped-event', 'client');
+  api.use('sergeyt:typeahead', 'client')
   api.use('mongo', ['client', 'server']);
     //CSS
   api.add_files('style.css', 'client');

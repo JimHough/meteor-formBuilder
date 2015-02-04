@@ -2,10 +2,10 @@
   {{#if isVisible}}
   <div class='form-group {{#if error}}has-error{{/if}}'>
     {{#if schemaObj.labelText}}<label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
-    <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+    <div id='{{_id}}' class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
       {{#each schemaObj.options}}
       <label class='checkbox{{#if schemaObj.inline}}-inline{{/if}}'>
-        <input type='checkbox' name='{{_id}}'>
+        <input type='checkbox'>
         {{this}}
       </label>
       {{/each}}
