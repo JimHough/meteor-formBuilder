@@ -127,6 +127,7 @@ var setValue = function(template, value){
     SparkMD5.GetFileMD5(value, function(hash){
       fileData.md5 = hash;
       FormBuilder.views.update({_id:id}, {$set:{currentValue:fileData}});
+      template.schemaObj.valueChanged(fileData);
       template.fbViewFile.md5 = hash;
       template.fbViewFile.md5Dep.changed();
     });

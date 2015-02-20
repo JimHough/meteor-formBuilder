@@ -44,13 +44,9 @@ var nextScan = function(){
     try{
       var value = qrcode.process(ctx);
       stopScan(null,template);
-      FormBuilder.views.update({_id:id}, {$set:{currentValue:value}});
-      FormBuilder.views.update({_id:id}, {$set:{error:""}});
-      var viewData = FormBuilder.views.findOne({_id:id});
-      if(viewData.schemaObj.asYouType){
-        var error = FormBuilder.controllers[viewData.schemaObj.controller].validate(viewData.fieldName, value, viewData.schemaObj, window[viewData.formObj.collection], viewData.formObj.document);
-        FormBuilder.views.update({_id:id}, {$set:{error:error}});
-      }
+      var controller = FormBuilder.controllers[template.data.schemaObj.controller];
+      controller.setValue(template.data.fieldName, template.data.parentID, {value:template.data.position}, value);
+      template.schemaObj.valueChanged(value);
     } catch(e){
       data.errorMsg = 'Failed - ' + e;
       data.errorMsgDep.changed();

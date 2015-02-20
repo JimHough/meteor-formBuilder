@@ -4,11 +4,8 @@ Template.fbViewNumber_create_update.events({
     var value = null;
     if(!event.target.validity.valid || (event.target.value !== ''))
       value = parseFloat(event.target.value);
-    var viewData = FormBuilder.views.findOne({_id:event.target.id});
-    FormBuilder.views.update({_id:viewData._id}, {$set:{currentValue:value}});
-    if(viewData.schemaObj.asYouType){
-      var error = FormBuilder.controllers[viewData.schemaObj.controller].validate(viewData.fieldName, value, viewData.schemaObj, window[viewData.formObj.collection], viewData.formObj.document);
-      FormBuilder.views.update({_id:viewData._id}, {$set:{error:error}});
-    }
+    var controller = FormBuilder.controllers[context.data.schemaObj.controller];
+    controller.setValue(context.data.fieldName, context.data.parentID, {value:context.data.position}, value);
+    context.data.schemaObj.valueChanged(value);
   }
 });

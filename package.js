@@ -8,7 +8,8 @@ Package.on_use(function (api) {
   api.use('underscore', 'server');
   api.use(['livedata', 'underscore', 'deps', 'templating', 'ui', 'blaze', 'ejson', 'reactive-var'], 'client');
   api.use('raix:ui-dropped-event', 'client');
-  api.use('sergeyt:typeahead', 'client')
+  api.use('sergeyt:typeahead', 'client');
+  api.use('dburles:mongo-collection-instances', ['client', 'server']);
   api.use('mongo', ['client', 'server']);
     //CSS
   api.add_files('style.css', 'client');
@@ -33,6 +34,7 @@ Package.on_use(function (api) {
   api.add_files('lib/fbHelpers.js', ['client','server']);
   api.add_files('lib/fbWrapper.js', ['client','server']);
   api.add_files('lib/fbModals.js', ['client','server']);
+  api.add_files('js/fbTables.js', ['client','server']);
   //Controllers (client and server in lib)
   api.add_files('lib/Controllers/fbControllerBase.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerBaseMulti.js', ['client','server']);

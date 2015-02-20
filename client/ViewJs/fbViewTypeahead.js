@@ -1,11 +1,7 @@
 var valueChanged = function(event,context){
-  var value = event.target.value;
-  var viewData = FormBuilder.views.findOne({_id:event.target.id});
-  FormBuilder.views.update({_id:viewData._id}, {$set:{currentValue:value}});
-  if(viewData.schemaObj.asYouType){
-    var error = FormBuilder.controllers[viewData.schemaObj.controller].validate(viewData.fieldName, value, viewData.schemaObj, window[viewData.formObj.collection], viewData.formObj.document);
-    FormBuilder.views.update({_id:viewData._id}, {$set:{error:error}});
-  }
+  var controller = FormBuilder.controllers[context.data.schemaObj.controller];
+  controller.setValue(context.data.fieldName, context.data.parentID, {value:context.data.position}, event.target.value);
+  context.data.schemaObj.valueChanged(event.target.value);
 };
 
 Template.fbViewTypeahead_create_update.events({
@@ -18,7 +14,7 @@ Template.fbViewTypeahead_create_update.rendered = function(){
   if(this.data.schemaObj.dataSource === null)
     throw new Error("TypeAhead control no datasource specified.");
   var data = this.data.schemaObj.dataSource.split(".");
-  var collection = window[data[0]];
+  var collection = Mongo.Collection.get(data[0]);
   var field = data[1] || 'name';
   var findMatches = function (q, cb) {
     q = q + "";

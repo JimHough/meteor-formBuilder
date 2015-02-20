@@ -4,12 +4,16 @@ Template.fbViewCheckbox_create_update.events({
     context.$('input:checkbox').each(function(i){
       value[i] = (this.checked === true);
     });
-    var id = $(event.target).closest('div').attr('id');
-    var viewData = FormBuilder.views.findOne({_id:id});
-    FormBuilder.views.update({_id:viewData._id}, {$set:{currentValue:value}});
-    if(viewData.schemaObj.asYouType){
-      var error = FormBuilder.controllers[viewData.schemaObj.controller].validate(viewData.fieldName, value, viewData.schemaObj, window[viewData.formObj.collection], viewData.formObj.document);
-      FormBuilder.views.update({_id:viewData._id}, {$set:{error:error}});
-    }
+    var controller = FormBuilder.controllers[context.data.schemaObj.controller];
+    controller.setValue(context.data.fieldName, context.data.parentID, {value:context.data.position}, value);
+    context.data.schemaObj.valueChanged(value);
+  }
+});
+
+Template.fbViewCheckbox_create_update.helpers({
+  getValue:function(){
+    var template = Template.instance();
+    var view = FormBuilder.views.findOne(template.data._id);
+    return view && view.currentValue && view.currentValue[this.index];
   }
 });
