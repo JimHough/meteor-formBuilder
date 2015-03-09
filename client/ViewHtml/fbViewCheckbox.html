@@ -1,8 +1,8 @@
 <template name="fbViewCheckbox_create_update">
   {{#if isVisible}}
   <div class='form-group {{#if error}}has-error{{/if}}'>
-    {{#if schemaObj.labelText}}<label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
-    <div id='{{_id}}' class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+    {{#if schemaObj.labelText}}<label class='control-label col-sm-{{getLabelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
+    <div id='{{_id}}' class='{{#if schemaObj.labelText}}col-sm-{{getInputWidth}}{{/if}}'>
       {{#each addIndex schemaObj.options}}
       <label class='checkbox{{#if schemaObj.inline}}-inline{{/if}}'>
         <input type='checkbox' checked="{{getValue}}">
@@ -19,13 +19,13 @@
   {{#if isVisible}}
     {{#if schemaObj.labelText}}
       <div class='form-group'>
-        <label class='control-label col-sm-{{formObj.labelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>
-        <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+        <label class='control-label col-sm-{{getLabelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>
+        <div class='{{#if schemaObj.labelText}}col-sm-{{getInputWidth}}{{/if}}'>
           <p id='{{_id}}'>{{currentValue}}</p>
         </div>
       </div>
     {{else}}
-      <div class='{{#if schemaObj.labelText}}col-sm-{{formObj.inputWidth}}{{/if}}'>
+      <div class='{{#if schemaObj.labelText}}col-sm-{{getInputWidth}}{{/if}}'>
         <p id='{{_id}}'>{{currentValue}}</p>
       </div>
     {{/if}}

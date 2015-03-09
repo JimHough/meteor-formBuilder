@@ -1,0 +1,13 @@
+<template name="fbWrapper">
+  {{#with getForm}}
+    {{#if isList}}
+      {{> fbList}}
+    {{else}}
+      {{#if isScan}}
+        {{> fbScan}}
+      {{else}}
+        {{> fbForm}}
+      {{/if}}
+    {{/if}}
+  {{/with}}
+</template>

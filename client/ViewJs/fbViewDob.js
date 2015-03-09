@@ -1,3 +1,5 @@
+Template.fbViewDob_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
+Template.fbViewDob_read.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewDob_create_update.events({
   'input':function(event,context) {
     var controller = FormBuilder.controllers[context.data.schemaObj.controller];

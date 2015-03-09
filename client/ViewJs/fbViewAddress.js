@@ -1,3 +1,5 @@
+Template.fbViewAddress_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
+Template.fbViewAddress_read.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewAddress_create_update.helpers({
   getTemplate:function(){
     return Template[this.template];

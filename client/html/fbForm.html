@@ -1,0 +1,21 @@
+<template name="fbForm">
+  <form class="form-horizontal" role="form" name={{_id}}>
+    {{#each getViews}}
+    {{> getTemplate}}
+    {{/each}}
+    {{#if isCreate}}
+    <div class="form-group">
+      <div class="col-sm-offset-{{labelWidth}} col-sm-{{inputWidth}}">
+        <button type="submit" formnovalidate="formnovalidate" class="btn btn-primary btn-form-submit">Create</button>
+      </div>
+    </div>
+    {{/if}}
+    {{#if isUpdate}}
+    <div class="form-group">
+      <div class="col-sm-offset-{{labelWidth}} col-sm-{{inputWidth}}">
+        <button type="submit" formnovalidate="formnovalidate" class="btn btn-primary btn-form-submit">Update</button>
+      </div>
+    </div>
+    {{/if}}
+  </form>
+</template>

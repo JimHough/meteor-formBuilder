@@ -1,7 +1,9 @@
+Template.fbViewTypeahead_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
+Template.fbViewTypeahead_read.helpers(FormBuilder.helpers.viewBaseHelpers);
+
 var valueChanged = function(event,context){
   var controller = FormBuilder.controllers[context.data.schemaObj.controller];
   controller.setValue(context.data.fieldName, context.data.parentID, {value:context.data.position}, event.target.value);
-  context.data.schemaObj.valueChanged(event.target.value);
 };
 
 Template.fbViewTypeahead_create_update.events({

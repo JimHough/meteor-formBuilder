@@ -10,13 +10,16 @@ Package.on_use(function (api) {
   api.use('raix:ui-dropped-event', 'client');
   api.use('sergeyt:typeahead', 'client');
   api.use('dburles:mongo-collection-instances', ['client', 'server']);
+  api.use('reactive-var', ['client', 'server']);
   api.use('mongo', ['client', 'server']);
-    //CSS
+  //CSS
   api.add_files('style.css', 'client');
   //HTML
-  api.add_files('client/spark-md5.js', 'client');
-  api.add_files('client/fbWrapper.html', 'client');
-  api.add_files('client/fbModals.html', 'client');
+  api.add_files('client/html/fbWrapper.html', 'client');
+  api.add_files('client/html/fbModals.html', 'client');
+  api.add_files('client/html/fbList.html', 'client');
+  api.add_files('client/html/fbForm.html', 'client');
+  api.add_files('client/html/fbScan.html', 'client');
   api.add_files('client/ViewHtml/fbViewAddress.html', 'client');
   api.add_files('client/ViewHtml/fbViewArray.html', 'client');
   api.add_files('client/ViewHtml/fbViewCheckbox.html', 'client');
@@ -32,9 +35,9 @@ Package.on_use(function (api) {
   api.add_files('client/ViewHtml/fbViewTypeahead.html', 'client');
   //(client and server in lib)
   api.add_files('lib/fbHelpers.js', ['client','server']);
-  api.add_files('lib/fbWrapper.js', ['client','server']);
-  api.add_files('lib/fbModals.js', ['client','server']);
   api.add_files('js/fbTables.js', ['client','server']);
+  api.add_files('server/fbValidate.js', 'server');
+  
   //Controllers (client and server in lib)
   api.add_files('lib/Controllers/fbControllerBase.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerBaseMulti.js', ['client','server']);
@@ -53,6 +56,12 @@ Package.on_use(function (api) {
   api.add_files('lib/Controllers/fbControllerTypeahead.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerUnchecked.js', ['client','server']);
   //Javascript
+  api.add_files('client/js/spark-md5.js', 'client');
+  api.add_files('client/js/fbWrapper.js', 'client');
+  api.add_files('client/js/fbList.js', 'client');
+  api.add_files('client/js/fbForm.js', 'client');
+  api.add_files('client/js/fbModals.js', 'client');
+  api.add_files('client/js/fbScan.js', 'client');
   api.add_files('client/ViewJs/fbViewAddress.js', 'client');
   api.add_files('client/ViewJs/fbViewArray.js', 'client');
   api.add_files('client/ViewJs/fbViewCheckbox.js', 'client');

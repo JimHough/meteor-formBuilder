@@ -20,7 +20,7 @@ FormBuilder.tables.AddCollection = function(collectionName){
       scrollX: true,
       name: collectionName + "List",
       collection: collection,
-      columns: collection.columns,
+      columns: collection.columns
     };
     FormBuilder.tables[collectionName] = new Tabular.Table(options);
   }

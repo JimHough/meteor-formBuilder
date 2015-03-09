@@ -1,8 +1,9 @@
+Template.fbViewSelect_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
+Template.fbViewSelect_read.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewSelect_create_update.events({
   'input': function (event, context) {
     var controller = FormBuilder.controllers[context.data.schemaObj.controller];
     controller.setValue(context.data.fieldName, context.data.parentID, {value: context.data.position}, event.target.value);
-    context.data.schemaObj.valueChanged(event.target.value);
   }
 });
 
@@ -16,24 +17,29 @@ Template.fbViewSelect_create_update.rendered = function () {
       var field = data[1] || 'name';
       template.autorun(function(){
           var select = template.$('select')[0];
-          select.add(document.createElement("option"));
-          collection.find().forEach(
-              function (myDoc) {
-                  var option = document.createElement("option");
-                  option.text = myDoc[field] + "";
-                  if(option.text === template.data.currentValue)option.selected = "selected";
-                  select.add(option);
-              }
-          );
+          if(select){
+            select.add(document.createElement("option"));
+            collection.find().forEach(
+                function (myDoc) {
+                    var option = document.createElement("option");
+                    option.text = myDoc[field] + "";
+                    if(option.text === template.data.currentValue)option.selected = "selected";
+                    select.add(option);
+                }
+            );
+          }
       });
     }
     else if(typeof source === 'object' && source.length){
       var select = template.$('select')[0];
-      select.add(document.createElement("option"));
-      _.each(source, function(myDoc) {
-        var option = document.createElement("option");
-        option.text = myDoc + "";
-        select.add(option);
-      });
+      if(select){
+        select.add(document.createElement("option"));
+        _.each(source, function(myDoc) {
+          var option = document.createElement("option");
+          option.text = myDoc + "";
+          if(option.text === template.data.currentValue)option.selected = "selected";
+          select.add(option);
+        });
+      }
     }
 };

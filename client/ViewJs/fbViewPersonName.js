@@ -1,3 +1,5 @@
+Template.fbViewPersonName_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
+Template.fbViewPersonName_read.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewPersonName_create_update.helpers({
   getTemplate:function(){
     return Template[this.template];

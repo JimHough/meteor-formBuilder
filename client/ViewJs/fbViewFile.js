@@ -1,3 +1,5 @@
+Template.fbViewFile_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
+Template.fbViewFile_read.helpers(FormBuilder.helpers.viewBaseHelpers);
 navigator.getUserMedia  = navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
@@ -105,7 +107,7 @@ var stopScan = function(event, template){
 //Sets the current value of the form field
 var setValue = function(template, value){
   var fileData={reference:"", md5:""};
-  var id = template.$('.image-preview').attr('id');
+  var controller = FormBuilder.controllers[template.data.schemaObj.controller];
   if(value instanceof File){
     _.extend(fileData, _.pick(value, "name", "size", "type", "lastModified"));
     fileData.extension = fileData.name.split(".").pop().toLowerCase();
@@ -126,8 +128,7 @@ var setValue = function(template, value){
     //Calculate the MD5 checksum
     SparkMD5.GetFileMD5(value, function(hash){
       fileData.md5 = hash;
-      FormBuilder.views.update({_id:id}, {$set:{currentValue:fileData}});
-      template.schemaObj.valueChanged(fileData);
+      controller.setValue(template.data.fieldName, template.data.parentID, {value:template.data.position}, fileData);
       template.fbViewFile.md5 = hash;
       template.fbViewFile.md5Dep.changed();
     });
@@ -145,14 +146,15 @@ var setValue = function(template, value){
     template.fbViewFile.thumbnail = value;
     template.fbViewFile.thumbnailDep.changed();
   }
-  FormBuilder.views.update({_id:id}, {$set:{currentValue:fileData}});
+  controller.setValue(template.data.fieldName, template.data.parentID, {value:template.data.position}, fileData);
 };
 
 //Gets the url to show for the preview
 var getFileUrl = function(template){
-  if(!FormBuilder.helpers.canAccess(template, "data._id", "data.formObj")) return;
+  if(!FormBuilder.helpers.canAccess(template, "data._id", "data.formID")) return;
+  var form = FormBuilder.forms.findOne(template.data.formID);
+  var view = FormBuilder.views.findOne(template.data._id);
   var result = {id:template.data._id, url:'/packages/jhough_formbuilder/img/noImageThumb.png'};
-  var view = FormBuilder.views.findOne(result.id);
   if(FormBuilder.helpers.canAccess(view, "currentValue.reference", "currentValue.type", "currentValue.extension") && view.currentValue.reference !== "")
   {
     if(view.currentValue.type.lastIndexOf('image',0) === 0){
@@ -173,7 +175,7 @@ var getFileUrl = function(template){
   {
     result.url = template.fbViewFile.thumbnail;
   }
-  else if((template.data.formObj.type === "create") || (template.data.formObj.type === "update"))
+  else if((form.type === "create") || (form.type === "update"))
     result.url = '/packages/jhough_formbuilder/img/dropHere.png';
   return result;
 };
