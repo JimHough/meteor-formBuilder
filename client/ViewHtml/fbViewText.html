@@ -4,9 +4,9 @@
     {{#if schemaObj.labelText}}<label class='control-label col-sm-{{getLabelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
     <div class='{{#if schemaObj.labelText}}col-sm-{{getInputWidth}}{{/if}}'>
       {{#if textarea}}
-      <textarea class='form-control' id='{{_id}}'>{{currentValue}}</textarea>
+      <textarea class='form-control' id='{{_id}}' title={{schemaObj.title}} placeholder={{schemaObj.placeholder}}>{{currentValue}}</textarea>
       {{else}}
-        <input type='text' class='form-control' id='{{_id}}' value={{currentValue}}>
+        <input type='text' class='form-control' id='{{_id}}' title={{schemaObj.title}} placeholder={{schemaObj.placeholder}} value={{currentValue}}>
       {{/if}}
       {{#if error}}<span class='help-block'>{{error}}</span>{{/if}}
     </div>
@@ -16,17 +16,9 @@
 
 <template name="fbViewText_read">
   {{#if isVisible}}
-    {{#if schemaObj.labelText}}
-      <div class='form-group'>
-        <label class='control-label col-sm-{{getLabelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>
-        <div class='{{#if schemaObj.labelText}}col-sm-{{getInputWidth}}{{/if}}'>
-          <p id='{{_id}}'>{{currentValue}}</p>
-        </div>
-      </div>
-    {{else}}
-      <div class='{{#if schemaObj.labelText}}col-sm-{{getInputWidth}}{{/if}}'>
-        <p id='{{_id}}'>{{currentValue}}</p>
-      </div>
-    {{/if}}
+    <tr>
+      <td><b>{{schemaObj.labelText}}</b></td>
+      <td>{{currentValue}}</td>
+    </tr>
   {{/if}}
 </template>

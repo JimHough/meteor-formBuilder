@@ -45,6 +45,19 @@ FormBuilder.modals.addUpdateForm = function(data, callbacks){
   return id;
 };
 
+FormBuilder.modals.addReadForm = function(data, callbacks){
+  data = _.pick(data, 'title', 'collection', 'filter', 'document');
+  data = _.defaults(data, {title: 'Read', filter: 0xFFFF, type:'read'});
+  var id = FormBuilder.modals.insert(data);
+  //Immediately updates the DOM
+  Tracker.flush();
+  $('#' + id + '.modal')
+    .on('hidden.bs.modal', function(event,info){
+      FormBuilder.modals.remove(id);
+  }).on(callbacks);
+  return id;
+};
+
 FormBuilder.modals.addList = function(data, callbacks){
   data = _.pick(data, 'title', 'collection', 'filter');
   data = _.defaults(data, {title: 'Create', filter: 0xFFFF, type:'list'});

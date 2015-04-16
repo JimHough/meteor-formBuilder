@@ -30,6 +30,7 @@ Template.fbForm.helpers({
 //When the template is created make an object that will store the view of the form
 Template.fbForm.created = function () {
   this.formID = this.data._id;
+  this.success = false;
   var form = FormBuilder.forms.findOne(this.formID);
   var collection = Mongo.Collection.get(form.collection);
   //The position object is used for sorting the views, it is incremented internally inside the addViews method
@@ -48,6 +49,11 @@ Template.fbForm.created = function () {
     FormBuilder.helpers.loadCurrentValues(form._id);
 };
 
+Template.fbForm.destroyed = function(){
+  if(!this.success)
+    $("form[name='" + this.formId + "']").trigger('fbDestroyed');
+}
+
 Template.fbForm.events({
   //When submit is pressed try to insert, if an error is shown update the data store to show the error
   'submit form': function (event, template) {
@@ -55,6 +61,11 @@ Template.fbForm.events({
     var form = FormBuilder.forms.findOne(template.formID);
     var collection = Mongo.Collection.get(form.collection);
     FormBuilder.helpers.getCurrentValues(form._id, function (doc) {
+      //Remove undefined values
+      for (var i in doc) {
+        if (doc[i] === undefined)
+          delete doc[i];
+      }
       var databaseCallback = function (errors, id) {
         //id comes through as number of affected documents with update correct this here
         if(form.type === 'update')
@@ -76,7 +87,10 @@ Template.fbForm.events({
           var schemaObj = collection.schema[fieldName];
           FormBuilder.controllers[schemaObj.controller].setError(fieldName, form._id, position, errors, id);
         });
-        if (!error) doc = collection.findOne(id);
+        if (!error){
+          doc = collection.findOne(id);
+          template.success = true;
+        }
         if (form.type === 'create')
           $("form[name='" + form._id + "']").trigger('fbAfterCreate', [{doc: doc, error: error}]);
         else if (form.type === 'update')

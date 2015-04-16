@@ -27,15 +27,12 @@
 
 <template name="fbViewArray_read">
   {{#if isVisible}}
-    <div class='form-group'>
-      {{#if schemaObj.labelText}}<label class='control-label col-sm-{{getLabelWidth}}' for='{{_id}}'>{{schemaObj.labelText}}</label>{{/if}}
-      <div class='{{#if schemaObj.labelText}}col-sm-{{getInputWidth}}{{/if}}'>
-        <ul class="list-group fbArray-container" id='{{_id}}'>
-          {{#each getFields}}
-              {{> getTemplate}}
-          {{/each}}
-        </ul>
-      </div>
-    </div>
+    <tr>
+      <td><b>{{schemaObj.labelText}}</b></td>
+      <td>{{currentValue}}</td>
+    </tr>
+    {{#each getFields}}
+      {{> getTemplate}}
+    {{/each}}
   {{/if}}
 </template>

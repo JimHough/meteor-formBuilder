@@ -22,5 +22,16 @@ Template.fbViewReference_create_update.events({
         controller.setValue(template.data.fieldName, template.data.parentID, {value:template.data.position},value);
       }
     }});
+  },
+  'click .button-create':function(event,template) {
+    //Show a modal with a list to select the item to reference
+    var collection = template.data.schemaObj.collection;
+    FormBuilder.modals.addCreateForm({title:'Create a new Item', collection:collection, filter:template.data.schemaObj.addFormFilter, title:template.data.schemaObj.addFormTitle},{'fbAfterCreate':function(event, info){
+      if(info && info.doc && info.doc._id){
+        var value = collection + ":" + info.doc._id;
+        var controller = FormBuilder.controllers[template.data.schemaObj.controller];
+        controller.setValue(template.data.fieldName, template.data.parentID, {value:template.data.position},value);
+      }
+    }});
   }
 });

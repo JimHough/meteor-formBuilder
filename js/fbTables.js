@@ -16,8 +16,8 @@ FormBuilder.tables.AddCollection = function(collectionName){
   //Create a table if one doesnt already exist for this collection
   if (!FormBuilder.tables[collectionName]) {
     var options = {
-      autoWidth: true,
-      scrollX: true,
+      autoWidth: false,
+      scrollX: true, //messes up alignment of headers
       name: collectionName + "List",
       collection: collection,
       columns: collection.columns

@@ -2,10 +2,12 @@
   height: 100%;
   position:absolute;
   top: 0;
-  right: 0;
+  left: 0;
   z-index: 10;
 }
 
 .checkbox{
   padding-left: 20px
 }
+
+th, td { white-space: nowrap; }

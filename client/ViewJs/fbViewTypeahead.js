@@ -15,13 +15,14 @@ Template.fbViewTypeahead_create_update.events({
 Template.fbViewTypeahead_create_update.rendered = function(){
   if(this.data.schemaObj.dataSource === null)
     throw new Error("TypeAhead control no datasource specified.");
+  var dataFilter = this.data.schemaObj.dataFilter;
   var data = this.data.schemaObj.dataSource.split(".");
   var collection = Mongo.Collection.get(data[0]);
   var field = data[1] || 'name';
   var findMatches = function (q, cb) {
     q = q + "";
     q = q.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
-    var query = {};
+    var query = _.extend({},dataFilter);
     //regex used to determine if a string starts with the substring `q`
     query.$where = new RegExp('^' + q, 'i');
     query.$where += ".test(this." + field + ")";

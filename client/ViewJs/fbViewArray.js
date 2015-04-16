@@ -2,7 +2,7 @@ Template.fbViewArray_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewArray_read.helpers(FormBuilder.helpers.viewBaseHelpers);
 //Enables and disables the function buttons based on the views position and the maxCount and minCount values
 var updateButtons = function (event) {
-  var viewDataObj = FormBuilder.views.findOne({_id: event.target.id});
+  var viewDataObj = FormBuilder.views.findOne({_id: event.currentTarget.id});
   var viewDataObjs = FormBuilder.views.find({parentID: viewDataObj.parentID});
   var arrayField = FormBuilder.views.findOne({_id: viewDataObj.parentID});
   var length = viewDataObjs.count();
