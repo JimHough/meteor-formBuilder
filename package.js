@@ -135,3 +135,8 @@ Package.on_use(function (api) {
   if (api.export)
     api.export('FormBuilder');
 });
+
+Cordova.depends({
+    'org.apache.cordova.camera': '0.3.1',
+    'com.phonegap.plugins.barcodescanner': '2.0.1'
+});

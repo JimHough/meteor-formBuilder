@@ -1,12 +1,14 @@
 <template name='fbScan'>
-  <!--Pop-up Window-->
-  <form class="form-horizontal" role="form" name={{_id}}>
-    <div>
-      <video class="videoOutput" style="display:none;"></video>
-      <canvas class="canvasOutput"></canvas>
-    {{#if errorMsg}}
-      <p>{{errorMsg}}</p>
-    {{/if}}
-    </div>
-  </form>
+  {{Meteor.isCordova}}
+    <!--Pop-up Window-->
+    <form class="form-horizontal" role="form" name={{_id}}>
+      <div>
+        <video class="videoOutput" style="display:none;"></video>
+        <canvas class="canvasOutput"></canvas>
+      {{#if errorMsg}}
+        <p>{{errorMsg}}</p>
+      {{/if}}
+      </div>
+    </form>
+  {{/if}}
 </template>

@@ -1,3 +1,4 @@
+if(!Meteor.isCordova){
 navigator.getUserMedia  = navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
@@ -129,5 +130,6 @@ Template.fbScan.helpers({
   errorMsg:function(){
     var template = Template.instance();
     return template.fbScan.errorMsg.get();
-  }
+  }  
 });
+}

@@ -76,22 +76,34 @@ FormBuilder.modals.addList = function(data, callbacks){
 };
 
 FormBuilder.modals.addScan = function(data, callbacks){
-  data = _.pick(data, 'title');
-  data = _.defaults(data, {title: 'Scan a QR Code', type:'scan'});
-  var id = FormBuilder.modals.insert(data);
-  //Immediately updates the DOM
-  Tracker.flush();
-  $('#' + id + '.modal')
-    .on('fbScanComplete', function(event,info){
-      $(this).modal('hide');
-  })
-    .on('hidden.bs.modal', function(event,info){
-      $('#' + id + '.modal form').trigger('stopScan');
-      FormBuilder.modals.remove(id);
-  })
-    .on(callbacks);
-  $('#' + id + '.modal form').trigger('startScan');
-  return id;
+    data = _.pick(data, 'title');
+    data = _.defaults(data, {title: 'Scan a QR Code', type:'scan'});
+    var id = FormBuilder.modals.insert(data);
+    //Immediately updates the DOM
+    Tracker.flush();
+    var $popup = $('#' + id + '.modal');
+    $popup.on('fbScanComplete', function(event,info){
+        $(this).modal('hide');
+    });
+    $popup.on('hidden.bs.modal', function(event,info){
+        $('#' + id + '.modal form').trigger('stopScan');
+        FormBuilder.modals.remove(id);
+    });
+    $popup.on(callbacks);
+    if(Meteor.isCordova){
+      cordova.plugins.barcodeScanner.scan(
+        function(result) {
+          $popup.trigger('fbScanComplete', [{data: result.text}]);
+        },
+        function(error) {
+          alert("Scanning failed: " + error);
+        }
+      );
+    }
+    else{
+      $('#' + id + '.modal form').trigger('startScan');
+    }
+    return id;
 };
 
 FormBuilder.modals.addSnapshot = function(data, callbacks){
