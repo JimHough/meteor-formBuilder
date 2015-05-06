@@ -93,3 +93,22 @@ FormBuilder.modals.addScan = function(data, callbacks){
   $('#' + id + '.modal form').trigger('startScan');
   return id;
 };
+
+FormBuilder.modals.addSnapshot = function(data, callbacks){
+  data = _.pick(data, 'title');
+  data = _.defaults(data, {title: 'Take a Picture', type:'snapshot'});
+  var id = FormBuilder.modals.insert(data);
+  //Immediately updates the DOM
+  Tracker.flush();
+  $('#' + id + '.modal')
+    .on('fbSnapshotComplete', function(event,info){
+      $(this).modal('hide');
+  })
+    .on('hidden.bs.modal', function(event,info){
+      $('#' + id + '.modal form').trigger('stopScan');
+      FormBuilder.modals.remove(id);
+  })
+    .on(callbacks);
+  $('#' + id + '.modal form').trigger('startScan');
+  return id;
+};

@@ -10,9 +10,9 @@ FormBuilder.validate = function (collectionID) {
     var collection = Mongo.Collection.get(colID);
     if (!collection)
       throw new Meteor.Error(403, "validate called without a valid collection! (" + colID + ")");
-    _.each(_.without(_.keys(doc),"_id"), function (fieldName) {
+    _.each(doc, function (value, fieldName) {
+      if(fieldName === "_id") return;
       var schemaObj = collection.schema[fieldName] || {};
-      var value = doc[fieldName];
       var controller = schemaObj.controller;
       if (((typeof controller) !== 'string') || !FormBuilder.controllers[controller])
         errors[fieldName] = colID + '.schema.' + fieldName + ' fieldBuilder ' + controller + ' not found.';

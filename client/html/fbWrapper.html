@@ -6,7 +6,11 @@
       {{#if isScan}}
         {{> fbScan}}
       {{else}}
-        {{> fbForm}}
+        {{#if isSnapshot}}
+          {{> fbSnapshot}}
+        {{else}}
+          {{> fbForm}}
+        {{/if}}
       {{/if}}
     {{/if}}
   {{/with}}

@@ -35,12 +35,14 @@ Template.fbForm.created = function () {
   var collection = Mongo.Collection.get(form.collection);
   //The position object is used for sorting the views, it is incremented internally inside the addViews method
   var position = {value: 0};
+  collection.schema.schemaPath = 'schema';
   //Iterate over the schema object calling the add views method on each one 
-  _.each(_.keys(collection.schema), function (fieldName) {
-    var schemaObj = collection.schema[fieldName];
+  _.each(collection.schema, function (schemaObj, fieldName) {
+    if(fieldName === 'schemaPath') return;
+    schemaObj.schemaPath = collection.schema.schemaPath + "." + fieldName;
     //Get the controller for this database field
     if (((typeof schemaObj.controller) !== 'string') || !FormBuilder.controllers[schemaObj.controller])
-      console.warn(form.collection + '.schema.' + fieldName + ' controller ' + schemaObj.controller + ' not found.');
+      console.warn(form.collection + schemaObj.schemaPath + ' controller ' + schemaObj.controller + ' not found.');
     else {
       FormBuilder.controllers[schemaObj.controller].addViews(fieldName, form._id, schemaObj, position, form._id);
     }
@@ -52,7 +54,7 @@ Template.fbForm.created = function () {
 Template.fbForm.destroyed = function(){
   if(!this.success)
     $("form[name='" + this.formId + "']").trigger('fbDestroyed');
-}
+};
 
 Template.fbForm.events({
   //When submit is pressed try to insert, if an error is shown update the data store to show the error
@@ -61,11 +63,9 @@ Template.fbForm.events({
     var form = FormBuilder.forms.findOne(template.formID);
     var collection = Mongo.Collection.get(form.collection);
     FormBuilder.helpers.getCurrentValues(form._id, function (doc) {
-      //Remove undefined values
-      for (var i in doc) {
-        if (doc[i] === undefined)
-          delete doc[i];
-      }
+      //Remove undefined fields
+      Object.deleteUndefined(doc,true);
+      
       var databaseCallback = function (errors, id) {
         //id comes through as number of affected documents with update correct this here
         if(form.type === 'update')
@@ -83,8 +83,8 @@ Template.fbForm.events({
 
         //Iterate over the schema object calling the set error method on each one 
         var position = {value: 0};
-        _.each(_.keys(collection.schema), function (fieldName) {
-          var schemaObj = collection.schema[fieldName];
+        _.each(collection.schema, function (schemaObj, fieldName) {
+          if(fieldName === 'schemaPath')return;
           FormBuilder.controllers[schemaObj.controller].setError(fieldName, form._id, position, errors, id);
         });
         if (!error){

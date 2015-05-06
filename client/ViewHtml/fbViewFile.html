@@ -33,19 +33,13 @@
           <span style="padding-left: 10px;">{{fileText}}</span>
           <span class="input-group-btn">
             <input type="file" accept='{{schemaObj.accept}}' class='input-browse' id='{{_id}}' title={{schemaObj.title}} style='display:block;visibility:hidden;width:0;height:0;'>
-            {{#if running}}
-              <button type="button" class='btn btn-default button-stop'>
-                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
-              </button>
-            {{else}}
-              <button type="button" class='btn btn-default button-browse'>
-                <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-              </button>
-              {{#if pngAllowed}}
-              <button type="button" class='btn btn-default button-start'>
+            <button type="button" class='btn btn-default button-browse'>
+              <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+            </button>
+            {{#if pngAllowed}}
+              <button type="button" class='btn btn-default button-takePicture'>
                 <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
               </button>
-              {{/if}}
             {{/if}}
           </span>
         </div>

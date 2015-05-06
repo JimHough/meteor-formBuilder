@@ -1,108 +1,7 @@
 Template.fbViewFile_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewFile_read.helpers(FormBuilder.helpers.viewBaseHelpers);
-navigator.getUserMedia  = navigator.getUserMedia ||
-                          navigator.webkitGetUserMedia ||
-                          navigator.mozGetUserMedia ||
-                          navigator.msGetUserMedia;
+
 //<editor-fold desc="methods">
-//Finds a forwards facing camera yo use (only on chrome)
-var getSource = function(template){
-  //Find a camera that is facing the environment or has no facing value
-  var data = template.fbViewFile;
-  data.videoSource = {error:true, id:'Didnt find any cameras'};
-  if ((typeof MediaStreamTrack === 'function') && (typeof MediaStreamTrack.getSources === 'function')){
-    MediaStreamTrack.getSources(function (sourceInfos) {
-      for (var i = 0; i !== sourceInfos.length; ++i) {
-        var source = sourceInfos[i];
-        if ((sourceInfos[i].kind === 'video') && ((source.facing === '')||(source.facing === 'environment')))
-          data.videoSource = {error:false, id:source.id};
-      }
-      if (data.videoSource === null) data.videoSource = {error:true, id:'No suitable camera found'};
-    });
-  }
-};
-
-//Takes a snapshot and checks it for codes
-var nextScan = function(){
-  var template = this;
-  var data = this.fbViewFile;
-  if(!data.stream) return;
-  var video = template.$('.videoOutput')[0];
-  var canvas = template.$('.canvasOutput')[0];
-  if(video && canvas && video.videoWidth && video.videoHeight){
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    var ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0);
-    qrcode.imagedata = ctx.getImageData(0, 0, video.videoWidth, video.videoHeight);
-    qrcode.width = video.videoWidth;
-    qrcode.height = video.videoHeight;
-    var popup = template.$('.fbViewFile-popup');
-    if(!popup.hasClass('in')){
-      popup.modal('show');
-      popup.find('.modal-dialog').css({'width':(video.videoWidth + 32) +"px"});
-    }
-  }
-  clearTimeout(self.timer);
-  self.timer = setTimeout($.proxy(nextScan, template), 1000);
-};
-
-//Sets up the scanning and schedules the scan interval
-var startScan = function(event, template){
-  var data = template.fbViewFile;
-  var id = template.$('input').attr('id');
-  if( typeof navigator.getUserMedia === 'function' && typeof window.requestAnimationFrame === 'function'){
-    var errorCallback = function(e) {
-      data.errorMsg = 'Cannot access video';
-      data.errorMsgDep.changed();
-      FormBuilder.views.update({_id:id}, {$set:{error:data.errorMsg}});
-    };
-    var successCallback = function(stream) {
-      
-      var video = template.$('.videoOutput')[0];
-      //Hook the video element up to the camera stream
-      video.src = window.URL.createObjectURL(stream);
-      video.play();
-      //Store the stream so we can stop it later
-      data.stream = stream;
-      //Start a timer for the next scan
-      clearTimeout(data.timer);
-      data.timer = setTimeout($.proxy(nextScan, template), 1000);
-      //Set the running property to true
-      data.running = true;
-      data.runningDep.changed();
-    };
-    
-    if(!data.videoSource || data.videoSource.error){
-      data.errorMsg = data.videoSource.id;
-      data.errorMsgDep.changed();
-      FormBuilder.views.update({_id:id}, {$set:{error:data.errorMsg}});
-    }
-    //Set the max size of video
-    var constraints = {video: {mandatory:{maxWidth:320,maxHeight:320}}};
-    if(data.videoSource && !data.videoSource.error) constraints.video.optional = [{sourceId:data.videoSource.id}];
-    navigator.getUserMedia(constraints, successCallback, errorCallback);
-  }
-  else{
-    data.errorMsg = 'Video access not supported by this browser, get google chrome for best compatability';
-    data.errorMsgDep.changed();
-    FormBuilder.views.update({_id:id}, {$set:{error:data.errorMsg}});
-  }
-};
-
-//Stops the scanning
-var stopScan = function(event, template){
-  var data = template.fbViewFile;
-  var video = template.$('.videoOutput')[0];
-  template.$('.fbViewFile-popup').modal('hide');
-  if(video)video.src = null;
-  if(data.stream) data.stream.stop();
-  data.stream = null;
-  data.timer = null;
-  //Set the running property to true
-  data.running = false;
-  data.runningDep.changed();
-};
 
 //Sets the current value of the form field
 var setValue = function(template, value){
@@ -182,10 +81,6 @@ var getFileUrl = function(template){
 
 var init = function(template, readonly){
   if(!template.fbViewFile) template.fbViewFile = {};
-  template.fbViewFile.errorMsg = "";
-  template.fbViewFile.errorMsgDep = new Deps.Dependency();
-  template.fbViewFile.running = false;
-  template.fbViewFile.runningDep = new Deps.Dependency();
   template.fbViewFile.file = {name:"",extension:"",size:0,type:"",lastModified:0};
   template.fbViewFile.fileDep = new Deps.Dependency();
   template.fbViewFile.md5 = "";
@@ -195,8 +90,6 @@ var init = function(template, readonly){
   else 
     template.fbViewFile.thumbnail = '/packages/jhough_formbuilder/img/dropHere.png';
   template.fbViewFile.thumbnailDep = new Deps.Dependency();
-  //Find the right camera to use, only works in chrome
-  getSource(template);
 };
 //</editor-fold>
 
@@ -206,26 +99,17 @@ Template.fbViewFile_create_update.created = function(){
 };
 
 Template.fbViewFile_create_update.events({
-  'click .button-start' : function (event, template) {
+  'click .button-takePicture' : function (event, template) {
     event.preventDefault();
-    startScan(event, template);
+    event.stopPropagation();
+    FormBuilder.modals.addSnapshot({title:'Take a Picture'}, {'fbSnapshotComplete':function(event,info){
+      setValue(template, info.data);
+    }});
   },
   'click .button-browse' : function (event, template) {
     event.preventDefault();
+    event.stopPropagation();
     template.$('.input-browse').click();
-  },
-  'click .button-stop' : function (event, template) {
-    event.preventDefault();
-    stopScan(event, template);
-  },
-  'click .button-takePicture' : function (event, template) {
-    event.preventDefault();
-    var canvas = template.$('.canvasOutput')[0];
-    setValue(template, canvas.toDataURL("image/png"));
-    stopScan(event, template);
-  },
-  'hidden.bs.modal' : function (event, template) {
-    stopScan(event, template);
   },
   'change .input-browse' : function (event, template){
       event.preventDefault();
@@ -240,11 +124,6 @@ Template.fbViewFile_create_update.events({
 
 Template.fbViewFile_create_update.helpers({
   source:null,
-  running:function(){
-    var template = Template.instance();
-    template.fbViewFile.runningDep.depend();
-    return template.fbViewFile.running;
-  },
   fileUrl:function(){
     return getFileUrl(Template.instance());
   },

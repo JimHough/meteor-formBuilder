@@ -16,13 +16,18 @@ Template.fbWrapper.helpers({
     var tmpl = Template.instance();
     var form = FormBuilder.forms.findOne({_id: tmpl.formID});
     return form.type === 'scan';
+  },
+  isSnapshot: function(){
+    var tmpl = Template.instance();
+    var form = FormBuilder.forms.findOne({_id: tmpl.formID});
+    return form.type === 'snapshot';
   }
 });
 //When the template is created make an object that will store the view of the form
 Template.fbWrapper.created = function () {
   var template = this;
   //Create the form object and get the ID
-  if(template.data.type === 'scan'){
+  if(template.data.type === 'scan' || template.data.type === 'snapshot'){
     var form = _.pick(template.data, 'type');
     form = _.defaults(form, {type: 'scan'});
     template.formID = FormBuilder.forms.insert(form);

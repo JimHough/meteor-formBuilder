@@ -1,0 +1,15 @@
+<template name='fbSnapshot'>
+  <!--Pop-up Window-->
+  <form class="form-horizontal" role="form" name={{_id}}>
+    <div>
+      <video class="videoOutput" style="display:none;"></video>
+      <canvas class="canvasOutput"></canvas>
+      {{#if errorMsg}}
+        <p>{{errorMsg}}</p>
+      {{/if}}
+      <button type="button" class='btn btn-default button-takePicture center-block'>
+        <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+      </button>
+    </div>
+  </form>
+</template>

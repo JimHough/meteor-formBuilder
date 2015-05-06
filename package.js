@@ -20,6 +20,7 @@ Package.on_use(function (api) {
   api.add_files('client/html/fbList.html', 'client');
   api.add_files('client/html/fbForm.html', 'client');
   api.add_files('client/html/fbScan.html', 'client');
+  api.add_files('client/html/fbSnapshot.html', 'client');
   api.add_files('client/ViewHtml/fbViewAddress.html', 'client');
   api.add_files('client/ViewHtml/fbViewArray.html', 'client');
   api.add_files('client/ViewHtml/fbViewCheckbox.html', 'client');
@@ -31,6 +32,7 @@ Package.on_use(function (api) {
   api.add_files('client/ViewHtml/fbViewQRCode.html', 'client');
   api.add_files('client/ViewHtml/fbViewReference.html', 'client');
   api.add_files('client/ViewHtml/fbViewSelect.html', 'client');
+  api.add_files('client/ViewHtml/fbViewSubdocument.html', 'client');
   api.add_files('client/ViewHtml/fbViewText.html', 'client');
   api.add_files('client/ViewHtml/fbViewTypeahead.html', 'client');
   //(client and server in lib)
@@ -52,6 +54,7 @@ Package.on_use(function (api) {
   api.add_files('lib/Controllers/fbControllerQRCode.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerReference.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerSelect.js', ['client','server']);
+   api.add_files('lib/Controllers/fbControllerSubdocument.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerText.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerTypeahead.js', ['client','server']);
   api.add_files('lib/Controllers/fbControllerUnchecked.js', ['client','server']);
@@ -62,6 +65,7 @@ Package.on_use(function (api) {
   api.add_files('client/js/fbForm.js', 'client');
   api.add_files('client/js/fbModals.js', 'client');
   api.add_files('client/js/fbScan.js', 'client');
+  api.add_files('client/js/fbSnapshot.js', 'client');
   api.add_files('client/ViewJs/fbViewAddress.js', 'client');
   api.add_files('client/ViewJs/fbViewArray.js', 'client');
   api.add_files('client/ViewJs/fbViewCheckbox.js', 'client');
@@ -73,6 +77,7 @@ Package.on_use(function (api) {
   api.add_files('client/ViewJs/fbViewQRCode.js', 'client');
   api.add_files('client/ViewJs/fbViewReference.js', 'client');
   api.add_files('client/ViewJs/fbViewSelect.js', 'client');
+  api.add_files('client/ViewJs/fbViewSubdocument.js', 'client');
   api.add_files('client/ViewJs/fbViewText.js', 'client');
   api.add_files('client/ViewJs/fbViewTypeahead.js', 'client');
   //Images
