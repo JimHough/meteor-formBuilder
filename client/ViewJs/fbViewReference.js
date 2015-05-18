@@ -1,10 +1,12 @@
 Template.fbViewReference_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewReference_read.helpers(FormBuilder.helpers.viewBaseHelpers);
-Template.fbViewReference_create_update.helpers({
+var helpers = {
   currentItem: function(){
     return FormBuilder.controllers.fbControllerReference.getFormattedRef(this.currentValue);
   }
-});
+};
+Template.fbViewReference_create_update.helpers(helpers);
+Template.fbViewReference_read.helpers(helpers);
 
 Template.fbViewReference_create_update.events({
   'click .button-qr':function(event,template) {

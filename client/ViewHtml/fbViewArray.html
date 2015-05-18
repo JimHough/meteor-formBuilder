@@ -29,10 +29,15 @@
   {{#if isVisible}}
     <tr>
       <td><b>{{schemaObj.labelText}}</b></td>
-      <td>{{currentValue}}</td>
+      <td>
+        <table class='table table-bordered'>
+          {{#each getFields}}
+            <tbody class="subTable">
+              {{> getTemplate}}
+            </tbody>
+          {{/each}}
+        </table>
+      </td>
     </tr>
-    {{#each getFields}}
-      {{> getTemplate}}
-    {{/each}}
   {{/if}}
 </template>

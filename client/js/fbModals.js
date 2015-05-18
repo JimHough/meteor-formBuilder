@@ -24,6 +24,8 @@ FormBuilder.modals.addCreateForm = function(data, callbacks){
   })
     .on('hidden.bs.modal', function(event,info){
       FormBuilder.modals.remove(id);
+      if(FormBuilder.modals.find().count()>0)
+          $(document.body).addClass('modal-open');
   }).on(callbacks);
   return id;
 };
@@ -41,6 +43,8 @@ FormBuilder.modals.addUpdateForm = function(data, callbacks){
   })
     .on('hidden.bs.modal', function(event,info){
       FormBuilder.modals.remove(id);
+      if(FormBuilder.modals.find().count()>0)
+          $(document.body).addClass('modal-open');
   }).on(callbacks);
   return id;
 };
@@ -54,6 +58,8 @@ FormBuilder.modals.addReadForm = function(data, callbacks){
   $('#' + id + '.modal')
     .on('hidden.bs.modal', function(event,info){
       FormBuilder.modals.remove(id);
+      if(FormBuilder.modals.find().count()>0)
+          $(document.body).addClass('modal-open');
   }).on(callbacks);
   return id;
 };
@@ -71,6 +77,8 @@ FormBuilder.modals.addList = function(data, callbacks){
   })
     .on('hidden.bs.modal', function(event,info){
       FormBuilder.modals.remove(id);
+      if(FormBuilder.modals.find().count()>0)
+          $(document.body).addClass('modal-open');
   }).on(callbacks);
   return id;
 };
@@ -88,17 +96,22 @@ FormBuilder.modals.addScan = function(data, callbacks){
     $popup.on('hidden.bs.modal', function(event,info){
         $('#' + id + '.modal form').trigger('stopScan');
         FormBuilder.modals.remove(id);
+        if(FormBuilder.modals.find().count()>0)
+          $(document.body).addClass('modal-open');
     });
     $popup.on(callbacks);
     if(Meteor.isCordova){
-      cordova.plugins.barcodeScanner.scan(
-        function(result) {
-          $popup.trigger('fbScanComplete', [{data: result.text}]);
-        },
-        function(error) {
-          alert("Scanning failed: " + error);
-        }
-      );
+      Meteor.startup(function(){
+        cordova.plugins.barcodeScanner.scan(
+          function(result) {
+            $popup.trigger('fbScanComplete', [{data: result.text}]);
+          },
+          function(error) {
+            alert("Scanning failed: " + error);
+            $popup.trigger('fbScanComplete', [{data: ""}]);
+          }
+        );
+      });
     }
     else{
       $('#' + id + '.modal form').trigger('startScan');
@@ -119,6 +132,8 @@ FormBuilder.modals.addSnapshot = function(data, callbacks){
     .on('hidden.bs.modal', function(event,info){
       $('#' + id + '.modal form').trigger('stopScan');
       FormBuilder.modals.remove(id);
+      if(FormBuilder.modals.find().count()>0)
+          $(document.body).addClass('modal-open');
   })
     .on(callbacks);
   $('#' + id + '.modal form').trigger('startScan');

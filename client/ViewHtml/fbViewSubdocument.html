@@ -5,10 +5,7 @@
 </template>
 
 <template name="fbViewSubdocument_read">
-  {{#if isVisible}}
-    <tr>
-      <td><b>{{schemaObj.labelText}}</b></td>
-      <td>{{getFullAddress}}</td>
-    </tr>
-  {{/if}}
+  {{#each getViews}}
+    {{> getTemplate}}
+  {{/each}}
 </template>

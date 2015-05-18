@@ -49,7 +49,7 @@ var nextScan = function(){
     {
        data.errorMsg.set(''+e);
     }
-    if(value){
+    if(_.isString(value) && value !== ""){
       stopScan(null,template, value);
     }
   }

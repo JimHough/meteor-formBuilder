@@ -1,6 +1,6 @@
 Template.fbViewSubdocument_create_update.helpers(FormBuilder.helpers.viewBaseHelpers);
 Template.fbViewSubdocument_read.helpers(FormBuilder.helpers.viewBaseHelpers);
-Template.fbViewSubdocument_create_update.helpers({
+var helpers = {
   //Gets the array of views from the relevant data store for the form
   getViews: function () {
     var tmpl = Template.instance();
@@ -9,4 +9,6 @@ Template.fbViewSubdocument_create_update.helpers({
   getTemplate: function () {
     return Template[this.template];
   }
-});
+};
+Template.fbViewSubdocument_create_update.helpers(helpers);
+Template.fbViewSubdocument_read.helpers(helpers);
